@@ -1,0 +1,31 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes = void 0;
+const express_1 = require("express");
+const package_json_1 = __importDefault(require("../package.json"));
+const auth_controller_1 = require("./controllers/auth.controller");
+const focus_time_controller_1 = require("./controllers/focus-time.controller");
+const habits_controller_1 = require("./controllers/habits.controller");
+const auth_middleware_1 = require("./middlewares/auth.middleware");
+const habitsController = new habits_controller_1.HabitsController();
+const focusTimeController = new focus_time_controller_1.FocusTimeController();
+const authController = new auth_controller_1.AuthController();
+exports.routes = (0, express_1.Router)();
+exports.routes.get('/', (req, res) => {
+    const { name, version, description } = package_json_1.default;
+    res.status(200).json({ name, version, description });
+});
+exports.routes.get('/auth', authController.auth);
+exports.routes.get('/auth/callback', authController.authCallback);
+exports.routes.use(auth_middleware_1.authMiddleware);
+exports.routes.get('/habits', habitsController.index);
+exports.routes.post('/habits', habitsController.store);
+exports.routes.delete('/habits/:id', habitsController.remove);
+exports.routes.patch('/habits/:id/toggle', habitsController.toggle);
+exports.routes.get('/habits/:id/metrics', habitsController.metrics);
+exports.routes.post('/focus-time', focusTimeController.store);
+exports.routes.get('/focus-time', focusTimeController.index);
+exports.routes.get('/focus-time/metrics', focusTimeController.metricsByMonth);
