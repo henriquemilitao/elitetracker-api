@@ -4,7 +4,9 @@
   "description": "API para o Elite Tracker",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node ./build/src/server.js"
   },
   "keywords": [],
   "author": {
