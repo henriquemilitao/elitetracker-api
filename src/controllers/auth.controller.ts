@@ -1,14 +1,17 @@
 import axios, { isAxiosError } from 'axios';
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 
 const {
   GITHUB_CLIENT_ID: clientId,
   GITHUB_CLIENT_SECRETS: clientSecrets,
-  JWT_SECRET: secret,
   JWT_EXPIRESIN: expiresIn,
 } = process.env;
 
+const secret = process.env.JWT_SECRET as Secret;
+if (!secret) {
+  throw new Error('JWT_SECRET não definido nas variáveis de ambiente');
+}
 
 export class AuthController {
   auth = async (request: Request, response: Response) => {
