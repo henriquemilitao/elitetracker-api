@@ -42,7 +42,7 @@ export class AuthController {
       const { node_id: id, avatar_url: avatarUrl, name } = userDataResult.data;
 
       const token = jwt.sign({ id }, String(jwtSecret), {
-        expiresIn,
+        expiresIn: process.env.JWT_EXPIRESIN || '1d',
       });
 
       response.status(200).json({ id, avatarUrl, name, token });
