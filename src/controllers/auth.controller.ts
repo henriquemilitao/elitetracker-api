@@ -9,7 +9,8 @@ const {
 } = process.env;
 
 const secret = JWT_SECRET as Secret;
-const expiresIn = process.env.JWT_EXPIRESIN ?? '1d';
+const expiresIn = (process.env.JWT_EXPIRESIN ?? '1d') as SignOptions['expiresIn'];
+
 
 const options: SignOptions = {
   expiresIn,
