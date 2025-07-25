@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios';
 import { Request, Response } from 'express';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 
 const {
   GITHUB_CLIENT_ID: clientId,
@@ -10,6 +10,9 @@ const {
 } = process.env;
 
 const secret = JWT_SECRET as Secret;
+const options: SignOptions = {
+  expiresIn: expiresIn ?? '1d',
+};
 
 export class AuthController {
   auth = async (request: Request, response: Response) => {
@@ -43,9 +46,7 @@ export class AuthController {
 
       const { node_id: id, avatar_url: avatarUrl, name } = userDataResult.data;
 
-      const token = jwt.sign({ id }, secret, {
-        expiresIn: expiresIn ?? '1d',
-      });
+      const token = jwt.sign({ id }, secret, options);
 
       response.status(200).json({ id, avatarUrl, name, token });
     } catch (err) {
